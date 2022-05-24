@@ -1,0 +1,159 @@
+@media (max-width: 480px) {
+
+
+}
+
+@media (max-width: 767px) {
+    .section-title {
+        font-size: 20px;
+        margin-bottom: 40px;
+    }
+    .space-h2 {
+        font-size: 30px;
+    }
+    .mt-res-0{
+        margin-top: 0px ;
+    }
+}
+
+@media (max-width: 768px) {
+    .single-token{
+        text-align: center;
+    }
+
+
+   
+    .sidenav .menu-list{
+
+        width: 70%;
+
+    }
+
+    .sidenav .menu-list a {
+        font-size: 1.5rem;
+    }
+    
+    
+
+
+}
+
+@media (max-width: 991px) and (min-width: 768px) {
+
+
+
+
+
+}
+
+@media(max-width:991px){
+
+   .logo {
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    text-decoration: none;
+    color: var(--white);
+
+   }
+
+   .closebtn{
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 36px;
+    text-decoration: none;
+    color: var(--white);
+    padding: 0 30px !important;
+    display: block;
+  
+  }
+
+   .opennav{
+
+    display: block;
+  
+  }
+
+  .sidenav{
+    height: 100%;
+    width: 0;
+    position: fixed;
+    background-color: var(--black);
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    -webkit-flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 80px;
+  }
+
+    .custom-nav .navbar-nav{
+
+        align-items: flex-start;
+
+    }
+
+    .custom-nav .navbar-nav a{
+
+        padding: 10px 20px;
+
+    }
+
+    .custom-nav .top-social{
+
+        position: absolute;
+        bottom: 10px;
+
+    }
+
+    .dark-header a {
+        color: var(--white) !important;
+    }
+    .custom-drop-down {
+        position: inherit;
+        background: var(--dark);
+        /* width: 200px; */
+        display: none;
+    }
+
+
+    .slider-section{
+        min-height: auto;
+        margin-top: -40px;
+    }
+
+}
+
+@media (max-width: 1023px) and (min-width: 992px) {
+
+.slider-section{
+    min-height: auto;
+}
+
+}
+
+@media (max-width: 1280px) and (min-width: 1024px) {
+
+    .slider-section{
+        min-height: auto;
+    }
+
+
+}
+
+@media (max-width: 1400px) and (min-width: 1200px) {
+
+  
+}
+
+@media(min-width: 1440px) {
+}
