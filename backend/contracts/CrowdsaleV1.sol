@@ -16,70 +16,54 @@ contract Crowdsale is Context, ReentrancyGuard {
     
     // The token being sold
     IERC20 private _token;
-    IERC20 private BUSD;
+    
 
     // Address where funds are collected
     address payable private _wallet;
-    address payable public _manager;
+    
 
     // How many token units a buyer gets per wei.
     // The rate is the conversion between wei and the smallest and indivisible token unit.
     // So, if you are using a rate of 1 with a ERC20Detailed token with 3 decimals called TOK
     // 1 wei will give you 1 unit, or 0.001 TOK.
-    uint256 private _rate;
+    uint256 private _rate ;
     uint256 public min;
-    uint256 public minBuy = 0.250 * 10 ** 8;
-    uint256 public maxBuy = 0.500 * 10 ** 8;
-    uint256 public price_0 = 0.2 * 10 ** 8;
-    uint256 public price_1 = 0.4 * 10 ** 8;
-    uint256 public price_2 = 0.6 * 10 ** 8;
-    uint256 public sale_price ;
-
-    uint256 public time = block.timestamp;
+    
+  
+    
+   
+    
     
 
     // Amount of wei raised
     uint256 public _weiRaised;
     uint256 public _tokenPurchased;
-    bool public success;
-    bool public finalized;
-    bool public _buyable;
+    address[] public accounts;
 
+    struct PurchaseDetails{
+        uint256 time;
+        uint256 amount;
+    }
     
-    event TokensPurchased(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
-
+    mapping (address => uint256) public purchaseDetails;
+    mapping (address => uint256) msgValue;
+    mapping (address => bool) public exist; 
     
     
-    mapping (address => uint256) purchase;
-    mapping (address => uint256) msgValue; 
-    uint256 current = block.timestamp * 1 seconds;
-    uint256 public immutable limitationtime ;
-    uint256 public buyTime = block.timestamp + 10 days ;//+ 15 days
-    uint256 public locktime = buyTime + block.timestamp +  5 minutes * 1 seconds ;
-
-    constructor (uint8 price_type, address payable wallet_,address _manager,
-    uint256 _min) {
-        require(price_type >= 0, "Crowdsale: rate is 0");
-        sale_price = selectPrice(price_type);
+    constructor (address payable wallet_, IERC20 token_) {
+        require(address(token_) != address(0), "Crowdsale: token is the zero address");
         _wallet = wallet_;
-       
-       _manager = _manager;
-        min=_min;
-        limitationtime = buyTime;
-        BUSD = IERC20(0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56);
-    }
-    function setToken(address _add) public  {
-        _token  = IERC20(_add);
+        _token = token_;    
     }
     
 
-    // fallback () external payable {
-    //     buyTokens();
-    // }
+    fallback () external payable {
+        buyTokens();
+    }
 
-    // receive () external payable {
-    //     buyTokens();
-    // }
+    receive () external payable {
+        buyTokens();
+    }
 
     /**
      * @return the token being sold.
@@ -110,79 +94,69 @@ contract Crowdsale is Context, ReentrancyGuard {
         return _weiRaised;
     }
 
-    function buyable()public returns(bool) { 
-        if(buyTime > block.timestamp){
-            _buyable = true;
-        }
-        return _buyable;
+    function setRate(uint256 rate) public {
+        require(rate > 0 , "rate > 0");
+         _rate = rate;
     }
+
     
-    function selectPrice(uint8 no) public view returns(uint256){
-        if(no==0){
-            return price_0;
-        }else if(no==1){
-            return price_1;
-        }else if(no==2){
-            return price_2;
+    
+
+    function RaisedDetail(uint8 day) public view returns(uint256) {
+        uint256 index = accounts.length;
+        uint256 amount ;
+        for (uint256 index = 0; index < array.length; index++) {
+            address account = accounts[index];
+            if(purchaseDetails[account].time > block.timestamp - (day * 1 days)){
+                amount += purchaseDetails[account].amount;
+            }
+        }
+       return amount;
+    }
+
+
+    function addHistory(address account , uint256 amount) private {
+        if(exist[account]){
+
         }else{
-            require(false);
+            exist[account] = true;
+            accounts.push(account);
+            purchaseId[account] = accounts.length -1;
         }
+        purchaseDetails[account].amount = purchaseDetails[account].amount + amount;
+        purchaseDetails[account].time = block.timestamp;
     }
     
-   function buyTokens(uint _amount) public nonReentrant payable {
-        require ( buyTime > block.timestamp, "Buy Time expired");
-
-        // uint256 msg.value = BUSD.allowance(_msgSender(), address(this));
-        require(msg.value >=minBuy && msg.value <=maxBuy,"please approve Busd according to limit");
-        
-        //new calulate amount
-        uint256 one = 1 * 10 ** 8;
-        uint256 tokens =  (one * msg.value)/sale_price;
-        // calculate token amount to be created
-        // uint256 tokens = _getTokenAmount(msg.value);
-        require(_token.balanceOf(address(this)) >= tokens,"buy amount exceeds not enough Tokens remaining");
-        // BUSD.safeTransferFrom(_msgSender(),address(this), msg.value);
-        _tokenPurchased = _tokenPurchased + tokens;
-
-        // update state
-        _weiRaised = _weiRaised.add(msg.value);
-        
-            msgValue[_msgSender()] = msgValue[_msgSender()] + msg.value;
-            purchase[_msgSender()]=purchase[_msgSender()]+tokens;
+   function buyTokens() public nonReentrant payable {
        
+
+        uint256  msgvalue = msg.value;
+        
+        uint256 one = 1 *10**_token.decimals();
+        uint256 tokens = ((one)*msgvalue)/rate();
+        
+        require(_token.balanceOf(address(this)) >= tokens,"buy amount exceeds not enough Tokens remaining");
+        
+        // update state
+        addHistory(_msgSender() , tokens);
+        _tokenPurchased = _tokenPurchased + tokens;
+        _weiRaised = _weiRaised.add( msgvalue);
+        msgValue[_msgSender()] = msgValue[_msgSender()] +  msgvalue;
+        _processPurchase(_msgSender(), tokens);
+        _forwardFunds(msgvalue);
     }
 
-    function claim() public payable {
-        require (block.timestamp > limitationtime);
-        require (finalized,"ICO not finalized yet");
-
-      
-        uint256 t = purchase[_msgSender()];  
-        require (t>0,"0 tokens to claim");
-        _processPurchase(_msgSender(), t);
-         delete purchase[_msgSender()];
-     
-    }
+    
+    
     
     function balance() public view returns(uint){
         return _token.balanceOf(address(this));
     }
 
-    function Finalize() public  returns(bool) {
-        require( buyTime < block.timestamp, "the crowdSale is in progress");
-        require(!finalized,"already finalized");
-        require(_msgSender() == _wallet,"you are not the owner");
-        if(_weiRaised >= min ){
-            success = true;
-        }
-        else{
-             success = false;   
-        }
+    function getRemainingTokens() public  returns(bool) {
          uint256 remainingTokensInTheContract = _token.balanceOf(address(this)) - _tokenPurchased;
         _token.safeTransfer(address(_wallet),remainingTokensInTheContract);
-        _forwardFunds(_weiRaised);
-        finalized = true;
-        return success;
+        return true;
     }
 
     /**
@@ -253,11 +227,7 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @dev Determines how ETH is stored/forwarded on purchases.
      */
     function _forwardFunds(uint256 amount) internal {
-      BUSD.safeTransfer(_wallet, amount);
-    }
-
-    function timeyhyht () public returns (uint256) {
-        return block.timestamp;
+     address(_wallet).transfer(amount);
     }
 
       

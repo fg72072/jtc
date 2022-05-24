@@ -37,23 +37,18 @@ async function main() {
   // TokenBUSD = await ethers.getContractFactory("ZPad");
   // busd = await TokenBUSD.deploy();
   // await busd.deployed();
-
-  Crowdsale = await ethers.getContractFactory("Crowdsale");
-  crowdsale = await Crowdsale.deploy(1,"0x325B0C9edA2C7Bb6889C62cECC2D62A438C1e91f","0x325B0C9edA2C7Bb6889C62cECC2D62A438C1e91f",1);
-  await crowdsale.deployed();
-
   JTC = await ethers.getContractFactory("JTC");
   jTC = await JTC.deploy(deployer.getAddress() , crowdsale.address);
   await jTC.deployed();
 
-  await crowdsale.setToken(jTC.address)
 
- // await jTC.transfer(crowdsale.address,4000000000000)
+  Crowdsale = await ethers.getContractFactory("Crowdsale");
+  crowdsale = await Crowdsale.deploy(deployer.getAddress(),jTC.address);
+  await crowdsale.deployed();
 
-  
+  await jTC.transfer(crowdsale.address,4000000000000)
 
 
-  // We also save the contract's artifacts and address in the frontend directory
   saveFrontendFiles(jTC, crowdsale);
 }
 //,nftPreSale,nftPubSale,nft

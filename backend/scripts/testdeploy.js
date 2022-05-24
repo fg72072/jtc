@@ -28,65 +28,28 @@ async function main() {
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
     // zpad deploy // use zpad address
-    LitePad = await ethers.getContractFactory("LitePad");
-    litePad = await LitePad.deploy();
-    await litePad.deployed();
-
-    Busd = await ethers.getContractFactory("LitePad");
-    busd = await Busd.deploy();
-    await busd.deployed();
-
-    RewardToken = await ethers.getContractFactory("RewardToken");
-    rewardToken = await RewardToken.deploy();
-    await rewardToken.deployed();
-
-    TokenForSale = await ethers.getContractFactory("LitePad");
-    tokenForSale = await TokenForSale.deploy();
-    await tokenForSale.deployed();
-
-    TicketConsumer = await ethers.getContractFactory("TicketConsumer");
-    ticketConsumer = await TicketConsumer.deploy();
-    await ticketConsumer.deployed();
-
-    Factory = await ethers.getContractFactory("Factory");
-    factory = await Factory.deploy(ticketConsumer.address , busd.address);
-    await factory.deployed();
-
-    Staking = await ethers.getContractFactory("Staking");
-    staking = await Staking.deploy(litePad.address,rewardToken.address);
-    await staking.deployed();
-
-    CrowdSale = await ethers.getContractFactory("CrowdSale");
-    
-    
-    let tx = await rewardToken.setMinter(staking.address)
-    await tx.wait()
-
-    tx = await ticketConsumer.setFactory(factory.address)
-    await tx.wait()
-
-    tx = await ticketConsumer.setStaking(staking.address)
-    await tx.wait()
-
-    tx = await staking.setTicketConsumer(ticketConsumer.address)
-    await tx.wait()
-
-  
-  console.log("litePad deployed to:", litePad.address);
-  console.log("staking deployed to:", staking.address);
-  console.log("RewardToken deployed to:", rewardToken.address);
-  console.log("TokenForSale deployed to:", tokenForSale.address);
-  console.log("TicketConsumer deployed to:", ticketConsumer.address);
-  console.log("Factory deployed to:", factory.address);
+    JTC = await ethers.getContractFactory("JTC");
+    jTC = await JTC.deploy(deployer.getAddress() , crowdsale.address);
+    await jTC.deployed();
   
   
+    Crowdsale = await ethers.getContractFactory("Crowdsale");
+    crowdsale = await Crowdsale.deploy(deployer.getAddress(),jTC.address);
+    await crowdsale.deployed();
+
+    let _value = await ethers.utils.parseUnits("10000" , 18 )
+    await jTC.transfer(crowdsale.address,_value)
+
+  
+  console.log("jTC deployed to:", jTC.address);
+  console.log("crowdsale deployed to:", crowdsale.address);
 
   // We also save the contract's artifacts and address in the frontend directory
-  saveFrontendFiles(busd ,litePad, staking,rewardToken ,tokenForSale,ticketConsumer,factory);
+  saveFrontendFiles(jTC ,crowdsale);
 }
 //,nftPreSale,nftPubSale,nft
 
-function saveFrontendFiles(busd, litePad, staking ,rewardToken ,tokenForSale,ticketConsumer,factory) {
+function saveFrontendFiles(jTC, crowdsale) {
   const fs = require("fs");
   const contractsDir = "../frontend/src/contract";
 
@@ -94,13 +57,8 @@ function saveFrontendFiles(busd, litePad, staking ,rewardToken ,tokenForSale,tic
     fs.mkdirSync(contractsDir);
   }
   let config = `
- export const litePad_addr = "${litePad.address}"
- export const staking_addr = "${staking.address}"
- export const rewardToken_addr = "${rewardToken.address}"
- export const tokenForSale_addr = "${tokenForSale.address}"
- export const ticketConsumer_addr = "${ticketConsumer.address}"
- export const factory_addr = "${factory.address}"
- export const busd_addr = "${busd.address}"
+ export const jTC_addr = "${jTC.address}"
+ export const crowdsale_addr = "${crowdsale.address}"
 `
 
   let data = JSON.stringify(config)
@@ -108,27 +66,6 @@ function saveFrontendFiles(busd, litePad, staking ,rewardToken ,tokenForSale,tic
     contractsDir + '/addresses.js', JSON.parse(data)
 
   );
-  //   config =`[
-  //     "constructor()",
-  //     "event Approval(address indexed,address indexed,uint256)",
-  //     "event Transfer(address indexed,address indexed,uint256)",
-  //     "function allowance(address,address) view returns (uint256)",
-  //     "function approve(address,uint256) returns (bool)",
-  //     "function balanceOf(address) view returns (uint256)",
-  //     "function decimals() view returns (uint8)",
-  //     "function decreaseAllowance(address,uint256) returns (bool)",
-  //     "function increaseAllowance(address,uint256) returns (bool)",
-  //     "function name() view returns (string)",
-  //     "function symbol() view returns (string)",
-  //     "function totalSupply() view returns (uint256)",
-  //     "function transfer(address,uint256) returns (bool)",
-  //     "function transferFrom(address,address,uint256) returns (bool)"
-  //   ]`
-  //  data = JSON.stringify(config)
-  // fs.writeFileSync(
-  //   contractsDir + '/BUSD.json', JSON.parse(data)
-
-  // );
 
 }
 
