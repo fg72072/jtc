@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './App.css';
 import {SideBar,Header} from './components/Index';
-import {Home,TokenOverview,User} from './screens/Index';
+import {Home,TokenOverview,User,Monthly} from './screens/Index';
 import { useEagerConnect, useInactiveListener } from './hooks/useEagerConnect';
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
 
@@ -25,6 +25,7 @@ function App() {
         <Routes>
         <Route path="/" element={<Home/>}  />
         <Route path="/user" element={<User/>}  />
+        <Route path="/user/:id" element={<Monthly/>}  />
         <Route path="/token-overview" element={<TokenOverview/>}  />
 
         </Routes>
