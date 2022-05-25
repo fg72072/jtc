@@ -44,7 +44,7 @@ contract JTC is ERC20 , ERC20Burnable, Ownable {
                                     
     constructor(address beneficiary_ , address _private_round) ERC20("JTC Token", "JTC") 
          {
-
+        require(_private_round != address(0) && beneficiary_ != address(0) , "error address :: jtc");
         _beneficiary = beneficiary_;
         _releaseTime = block.timestamp * 1 seconds;
         // _manager = manager;

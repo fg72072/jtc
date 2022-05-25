@@ -27,20 +27,25 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-    // zpad deploy // use zpad address
-    JTC = await ethers.getContractFactory("JTC");
-    jTC = await JTC.deploy(deployer.getAddress() , crowdsale.address);
-    await jTC.deployed();
   
   
     Crowdsale = await ethers.getContractFactory("Crowdsale");
-    crowdsale = await Crowdsale.deploy(deployer.getAddress(),jTC.address);
+    crowdsale = await Crowdsale.deploy(deployer.getAddress());
     await crowdsale.deployed();
 
-    let _value = await ethers.utils.parseUnits("10000" , 18 )
-    await jTC.transfer(crowdsale.address,_value)
+    JTC = await ethers.getContractFactory("JTC");
+    jTC = await JTC.deploy(deployer.getAddress() , crowdsale.address);
+    await jTC.deployed();
 
-  
+    await crowdsale.setToken(jTC.address)
+    // let _value = await ethers.utils.parseUnits("0.000001" , 8 )
+    // await crowdsale.buyTokens({value:1000000})
+
+    // _value = await ethers.utils.parseUnits("0.03" , 18 )
+    // await crowdsale.connect(per1).buyTokens({value:_value})
+    // _value = await ethers.utils.parseUnits("1.5" , 18 )
+    // await crowdsale.connect(per2).buyTokens({value:_value})
+
   console.log("jTC deployed to:", jTC.address);
   console.log("crowdsale deployed to:", crowdsale.address);
 
@@ -51,7 +56,7 @@ async function main() {
 
 function saveFrontendFiles(jTC, crowdsale) {
   const fs = require("fs");
-  const contractsDir = "../frontend/src/contract";
+  const contractsDir = "../dashboard/src/contract";
 
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);

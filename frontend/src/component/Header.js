@@ -1,6 +1,7 @@
 import { Navbar, Container, Nav, NavDropdown,Button,Offcanvas } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import logo from "../assets/images/download.png";
+import whitepaper from "../assets/whitepaper.pdf";
 import { useWeb3React } from "@web3-react/core";
 import { connectWallet } from "../utils/connectWallet";
 import { useEagerConnect, useInactiveListener } from '../hooks/useEagerConnect';
@@ -72,7 +73,7 @@ console.log(active)
                   <Link to={"/private-sale"} onClick={(e) => closeNav()}>Private-Sale</Link>
                 </div>
                 </div>
-                <Link to={require('../assets/whitepaper.pdf')} target="_blank" download>Whitepaper</Link>
+                <a href={whitepaper} target="_blank" download="whitepaper">Whitepaper</a>
                 {/* <a href="#faq">FAQ</a> */}
                 <a href="#team" onClick={(e) => closeNav()}>Team</a>
 

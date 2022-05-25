@@ -60,7 +60,7 @@ module.exports = {
     },
   },
   abiExporter: {
-    path: '../frontend/src/contract',
+    path: '../dashboard/src/contract',
     runOnCompile: true,
     clear: true,
     only: [':JTC$', ':Crowdsale$'],

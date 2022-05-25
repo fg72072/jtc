@@ -23,11 +23,12 @@ function PublicSale(){
     } = useWeb3React();
 
     const [qty,setQty] = useState(1);
-    const [price,setPrice] = useState(0.35);
+    const initialValue = 0.000001
+    const [price,setPrice] = useState(0.000001);
 
     const increase = () => {
         
-        if(qty < 20){
+        if(qty < 10000000){
             setQty(qty + 1)
         }
     };
@@ -49,15 +50,16 @@ function PublicSale(){
     const buy = async (e) => {
         try{
             let signer = await loadProvider()
+            let _value = await ethers.utils.parseUnits(price.toString() , 8 )
             let crowdsaleCon = new ethers.Contract(crowdsale_addr, Crowdsale, signer)
-            let buy = await crowdsaleCon.buyTokens(1,{value : 40000000})
+            let buy = await crowdsaleCon.buyTokens({value : _value})
             await buy.wait()
         }catch(e){
 
         }
     }
     useEffect(()=>{
-        setPrice(0.35 * qty)
+        setPrice(initialValue * qty)
         loadProvider()
     },[qty])
 
@@ -96,13 +98,13 @@ return(
                             <h1>JTC Token</h1>
                             <p class="p-bold">You cannot mint our NFT cards at this time. Very soon this chance will be yours!</p>
 
-                            <h3>{parseFloat(price.toFixed(3))} BNB</h3>
+                            <h3>{parseFloat(price.toFixed(7))} BNB</h3>
 
                             <div className="min-max">
                                 
                             <div class="increament">
                                 <div class="value-button decrease" id="decrease" value="Decrease Value" onClick={(e)=>decrease()}>-</div>
-                                <input type="number" id="room-number" value={qty} min="1" max="20" class="number" readOnly/>
+                                <input type="number" id="room-number" value={qty} min="1" max="100000" class="number" readOnly/>
                                 <div class="value-button increase" id="increase" value="Increase Value" onClick={(e)=>increase()}>+</div>
                             </div>
 

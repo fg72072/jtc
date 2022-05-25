@@ -8,9 +8,6 @@ const { json } = require("hardhat/internal/core/params/argumentTypes");
 
 // This is a script for deploying your contracts. You can adapt it to deploy
 // yours, or create new ones.
-let jtc_address = "0x0CFc9D2c958e9a2616CB9f2015eb4883b9ECC4E8" // put jtc address here <-
-let busd_address = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"
-
 async function main() {
   // This is just a convenience check
   // if (network.name === "hardhat") {
@@ -22,7 +19,7 @@ async function main() {
   // }
 
   // ethers is avaialble in the global scope
-  const [deployer, per1, per2] = await ethers.getSigners();
+  const [deployer,per1,per2] = await ethers.getSigners();
   console.log(
     "Deploying the contracts with the account:",
     await deployer.getAddress()
@@ -30,32 +27,36 @@ async function main() {
 
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
+  
+  
+    Crowdsale = await ethers.getContractFactory("Crowdsale");
+    crowdsale = await Crowdsale.deploy(deployer.getAddress());
+    await crowdsale.deployed();
 
+    JTC = await ethers.getContractFactory("JTC");
+    jTC = await JTC.deploy(deployer.getAddress() , crowdsale.address);
+    await jTC.deployed();
 
- 
+    await crowdsale.setToken(jTC.address)
+    // let _value = await ethers.utils.parseUnits("0.000001" , 8 )
+    // await crowdsale.buyTokens({value:1000000})
 
-  // TokenBUSD = await ethers.getContractFactory("ZPad");
-  // busd = await TokenBUSD.deploy();
-  // await busd.deployed();
-  JTC = await ethers.getContractFactory("JTC");
-  jTC = await JTC.deploy(deployer.getAddress() , crowdsale.address);
-  await jTC.deployed();
+    // _value = await ethers.utils.parseUnits("0.03" , 18 )
+    // await crowdsale.connect(per1).buyTokens({value:_value})
+    // _value = await ethers.utils.parseUnits("1.5" , 18 )
+    // await crowdsale.connect(per2).buyTokens({value:_value})
 
+  console.log("jTC deployed to:", jTC.address);
+  console.log("crowdsale deployed to:", crowdsale.address);
 
-  Crowdsale = await ethers.getContractFactory("Crowdsale");
-  crowdsale = await Crowdsale.deploy(deployer.getAddress(),jTC.address);
-  await crowdsale.deployed();
-
-  await jTC.transfer(crowdsale.address,4000000000000)
-
-
-  saveFrontendFiles(jTC, crowdsale);
+  // We also save the contract's artifacts and address in the frontend directory
+  saveFrontendFiles(jTC ,crowdsale);
 }
 //,nftPreSale,nftPubSale,nft
 
 function saveFrontendFiles(jTC, crowdsale) {
   const fs = require("fs");
-  const contractsDir = "../frontend/src/contract";
+  const contractsDir = "../dashboard/src/contract";
 
   if (!fs.existsSync(contractsDir)) {
     fs.mkdirSync(contractsDir);
@@ -70,7 +71,6 @@ function saveFrontendFiles(jTC, crowdsale) {
     contractsDir + '/addresses.js', JSON.parse(data)
 
   );
-  
 
 }
 
