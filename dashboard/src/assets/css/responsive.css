@@ -9,6 +9,9 @@
         display: none;
 
     }
+    .analytics .dashboard-box{
+        width:100% !important;
+    }
     .mint-section{
         margin-top: 1rem;
         margin-bottom: 2rem;
@@ -164,6 +167,9 @@
         margin-top: 1rem;
         margin-bottom: 1rem;
     }
+    .analytics .dashboard-box{
+        width:28.33%;
+    }
 }
 
 @media (max-width: 991px) and (min-width: 768px) {
@@ -233,6 +239,9 @@
     }
     .admin-ul li {
         width: 31%;
+    }
+    .analytics .dashboard-box{
+        width: 28.33%;
     }
     
 }
