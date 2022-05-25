@@ -29,6 +29,22 @@ function Monthly() {
     const [users , setUsers] = useState([])
     const {id} = useParams();
 
+    const getMonth = (time) => {
+        const months3 = 0//7776000
+        const months6 = 7776000
+        const months9 = 7776000
+        const months12 = 7776000
+        const currentTime = Date.now()/1000
+        if(currentTime > time + months3 && currentTime < time + months6){
+            return 3;
+        }else if(currentTime > time + months6 && currentTime < time + months9){
+            return 6;
+        }else if(currentTime > time + months9 && currentTime < time + months12){
+            return 9;
+        }else if(currentTime > time + months12){
+            return 12;
+        } 
+    }
     const loadProvider = async () => {
         try {
             const web3Modal = new Web3Modal();
@@ -38,6 +54,12 @@ function Monthly() {
           } catch (e) {
           }
       };
+
+      useEffect(async()=>{
+        
+      },[])
+
+      
     return <>
         <Container fluid className="main-height">
             <Row>

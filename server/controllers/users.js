@@ -3,8 +3,10 @@ import userMessage from "../models/userMessage.js"
 import adminMessage from "../models/admin.js"
 
 export const getusers = async (req , res)=>{
+    const detail = req.body
+    const {month} = detail
     try {
-        const userMessages = await userMessage.find()
+        const userMessages = await userMessage.find({Month:month})
         res.status(200).json(userMessages)
     } catch (error) {
         res.status(404).json({message:error.message})
@@ -45,7 +47,7 @@ export const createuser = async (req , res)=> {
 
 
     }else{
-        console.log( "else")
+        res.status(201).json("updated")
     }
   
 }
