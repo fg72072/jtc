@@ -20,6 +20,8 @@ contract Crowdsale is Ownable, ReentrancyGuard {
 
     // Address where funds are collected
     address payable private _wallet;
+
+    uint256 public deploymentTime;
     
 
     // How many token units a buyer gets per wei.
@@ -53,6 +55,7 @@ contract Crowdsale is Ownable, ReentrancyGuard {
     
     constructor (address payable wallet_) {
         _wallet = wallet_;
+        deploymentTime = block.timestamp;
     }
     
 

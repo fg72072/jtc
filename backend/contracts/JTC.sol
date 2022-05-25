@@ -50,7 +50,7 @@ contract JTC is ERC20 , ERC20Burnable, Ownable {
         // _manager = manager;
        
         _mint(seed , (cap/100)*8);
-        // _mint(reserve , (cap/100)*18);
+        _mint(reserve , (cap/100)*18);
         _mint(_private_round , (cap/100)*10);
         _mint(public_sale , (cap/100)*15);
         _mint(eco_reward , (cap/100)*20);
