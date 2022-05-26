@@ -3,8 +3,8 @@ import userMessage from "../models/userMessage.js"
 import adminMessage from "../models/admin.js"
 
 export const getusers = async (req , res)=>{
-    const detail = req.body
-    const {month} = detail
+    const detail = req.params
+    const { month : month} = detail
     try {
         const userMessages = await userMessage.find({Month:month})
         res.status(200).json(userMessages)
@@ -17,15 +17,15 @@ export const getusers = async (req , res)=>{
 
 export const createuser = async (req , res)=> {
     const user = req.body
-    const {addresses , balance , time } = user
+    const {addresses , balance , time } = user.body
     
-
+    console.log("month" , addresses)
     const month = getMonth(time)
     console.log("month" , month)
-    const userDetails =  {addresses , balance , Month : month}
+    const userDetails =  {addresses,balance , Month : month}
+    console.log("Details" , userDetails)
      const is = await adminMessage.find({Month:month})
     //const is = false
-    console.log(is)
     if(is == null || is == undefined || is.length == 0){
         console.log( "if" )
         const details = { Month : month , isValid : true } 
@@ -47,7 +47,12 @@ export const createuser = async (req , res)=> {
 
 
     }else{
-        res.status(201).json("updated")
+        try {
+            const userMessages = await userMessage.find({Month:month})
+            res.status(200).json(userMessages)
+        } catch (error) {
+            res.status(404).json({message:error.message})
+        }
     }
   
 }
@@ -80,10 +85,10 @@ export const deleteuser = async (req , res)=>{
 }
 
 const getMonth = (time) =>{
-    const months3 = 0//7776000
-    const months6 = 7776000
-    const months9 = 7776000
-    const months12 = 7776000
+    const months3 = 86400//7776000
+        const months6 = 86400 + 3600   //15552000
+        const months9 = 86400 + 3600 *2 // 23328000
+        const months12 = 86400 + 3600 *3 // 31536000
     const currentTime = Date.now()/1000
     if(currentTime > time + months3 && currentTime < time + months6){
         return 3;
@@ -93,6 +98,8 @@ const getMonth = (time) =>{
         return 9;
     }else if(currentTime > time + months12){
         return 12;
+    }else{
+        return 0;
     }
    
 }

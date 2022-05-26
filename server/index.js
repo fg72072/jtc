@@ -5,7 +5,13 @@ import mongoose from "mongoose"
 import userRoutes from './routes/user.js'
 import adminRoutes from './routes/admin.js'
 
+
 const app = express()
+
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 
 app.use(express.json({ limit:"30mb" , extended : true }))
