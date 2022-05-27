@@ -57,17 +57,17 @@ function SideBar(props)
             <li className={url == "/user" ? "active" :''}>
                 <Link to={"/user"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>User</span></Link>
             </li>
-            <li className={url == "/user/three" ? "active" :''}>
-                <Link to={"/user/three"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>3 Months</span></Link>
+            <li className={url == "/user/3" ? "active" :''}>
+                <Link to={"/user/3"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>3 Months</span></Link>
             </li>
-            <li className={url == "/user/six" ? "active" :''}>
-                <Link to={"/user/six"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>6 Months</span></Link>
+            <li className={url == "/user/6" ? "active" :''}>
+                <Link to={"/user/6"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>6 Months</span></Link>
             </li>
-            <li className={url == "/user/nine" ? "active" :''}>
-                <Link to={"/user/nine"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>9 Months</span></Link>
+            <li className={url == "/user/9" ? "active" :''}>
+                <Link to={"/user/9"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>9 Months</span></Link>
             </li>
-            <li className={url == "/user/twelve" ? "active" :''}>
-                <Link to={"/user/twelve"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>12 Months</span></Link>
+            <li className={url == "/user/12" ? "active" :''}>
+                <Link to={"/user/12"} onClick={closeNav}><i class="fa-solid fa-users"></i><span>12 Months</span></Link>
             </li>
         </ul>
         </div>

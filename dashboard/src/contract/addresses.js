@@ -1,3 +1,3 @@
 
- export const jTC_addr = "0x57ad52bc4a284CC281a238a3F0571A295752963f"
- export const crowdsale_addr = "0xBF76b4008ac509d05d368974c700CF6A84d7Bf0D"
+ export const jTC_addr = "0xFd70d7DCf52E46c1183284762C27138aC0A4Ea4F"
+ export const crowdsale_addr = "0x4d39c430b03EaeD9D64d68bd11a1fcFe97f55B57"

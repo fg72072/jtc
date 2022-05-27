@@ -63,6 +63,7 @@ function Home() {
     useEffect(async ()=>{
         try {
            await GetInfo()
+           
         } catch (error) {
             
         }
