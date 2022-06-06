@@ -45,11 +45,12 @@ function PrivateSale(){
           } catch (e) {
           }
       };
-    const buy = async (e) => {
+      const buy = async (e) => {
         try{
             let signer = await loadProvider()
+            let _value = await ethers.utils.parseUnits(price.toString() , 8 )
             let crowdsaleCon = new ethers.Contract(crowdsale_addr, Crowdsale, signer)
-            let buy = await crowdsaleCon.buyTokens(1,{value : 40000000})
+            let buy = await crowdsaleCon.buyTokens({value : _value})
             await buy.wait()
         }catch(e){
 

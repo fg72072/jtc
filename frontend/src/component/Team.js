@@ -1,5 +1,6 @@
 import { Row, Col } from "react-bootstrap";
-import team from "../assets/images/team.jpg"
+import team from "../assets/images/team.png"
+import lady from "../assets/images/lady.png"
 
 
 function Team(){
@@ -45,7 +46,7 @@ function Team(){
                         </li>
 
                         <li>
-                        <img src={team}/>
+                        <img src={lady}/>
                             <span>
                             <h4>Yadira Deusto</h4>
                             <p>Venture Development Manager</p>
@@ -61,7 +62,7 @@ function Team(){
                         </li>
 
                         <li>
-                            <img src={team}/>
+                            <img src={lady}/>
                             <span>
                             <h4>Martha Galindo</h4>
                             <p>Real Estate Acquisition Manager</p>
@@ -105,7 +106,7 @@ function Team(){
 
                             <li>
 
-                                <img src={team}/>
+                                <img src={lady}/>
                                 <span>
                                 <h4>Paulina Lujan</h4>
                                 <p>Business Intelligence Analyst</p>
