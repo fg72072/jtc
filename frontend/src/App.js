@@ -11,7 +11,7 @@ import './assets/fontawesome/css/all.min.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import {BrowserRouter as Router,Route,Routes} from 'react-router-dom';
-import { Home,PublicSale,PrivateSale } from './screen';
+import { Home,PublicSale,PrivateSale, Kyc } from './screen';
 
 function App() {
   const [errorMessage, setErrorMessage] = useState();
@@ -28,6 +28,7 @@ function App() {
       <Route path="/" element={<Home/>} />
       <Route path="/public-sale" element={<PublicSale/>} />
       <Route path="/private-sale" element={<PrivateSale/>} />
+      <Route path="/kyc" element={<Kyc/>} />
       
 
     </Routes>
