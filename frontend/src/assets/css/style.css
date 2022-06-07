@@ -614,3 +614,11 @@ padding-bottom: 20px;
 .light-header .opennav i{
 color: var(--white);
 }
+
+.form-control{
+  border-color: var(--secondary) !important;
+}
+.form-control:focus{
+  border-color: var(--primary) !important;
+  box-shadow: none !important;
+}

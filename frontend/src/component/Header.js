@@ -76,7 +76,7 @@ console.log(active)
                 <a href={whitepaper} target="_blank" download="whitepaper">Whitepaper</a>
                 {/* <a href="#faq">FAQ</a> */}
                 <a href="#team" onClick={(e) => closeNav()}>Team</a>
-
+                <Link to={"/kyc"} onClick={(e) => closeNav()}>Kyc</Link>
             </Nav>
   
             <div className="d-flex justify-content-center">
